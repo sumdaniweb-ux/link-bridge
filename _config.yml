@@ -1,0 +1,30 @@
+title: "link-bridge"
+description: "Secure file upload & AI chat assistant"
+baseurl: "/link-bridge"
+url: "https://sumdaniweb-ux.github.io"
+
+# Theme - null means custom HTML/CSS
+theme: null
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+
+# Exclude these files
+exclude:
+  - README.md
+  - LICENSE
+  - Gemfile
+  - Gemfile.lock
+
+# Author info
+author:
+  name: "Mateen Sumdani"
+
+# SEO
+seo:
+  description: "محفوظ اپلوڈ • اسمارٹ اسسٹنٹ"
