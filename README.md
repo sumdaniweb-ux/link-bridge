@@ -1,22 +1,13 @@
+docs: update README for link-bridge
 # 🔗 link-bridge
-**محفوظ اپلوڈ • اسمارٹ اسسٹنٹ • API انٹیگریٹڈ**
+**محفوظ اپلوڈ • اسمارٹ اسسٹنٹ**
 
----
+🌐 **لائو:** https://sumdaniweb-ux.github.io/link-bridge/
 
-## 📋 **تعارف**
-link-bridge ایک مکمل فرنٹ اینڈ ایپلیکیشن ہے جو:
-- ✅ فائل اپلوڈ (تصویر/ویڈیو)
-- ✅ AI چیٹ اسسٹنٹ
-- ✅ API Key انٹیگریٹڈ
-- ✅ موبائل فرینڈلی ڈیزائن
-- ✅ GitHub Pages پر لائیو
+## فائلز
+- `index.html` — ڈیزائن
+- `app.js` — لاجک
+- `_config.yml` — سیٹنگز
 
----
-
-## 🌐 **لائو لنک**
-✅ **لائو:** https://sumdaniweb-ux.github.io/link-bridge/  
-✅ **ریپو:** https://github.com/sumdaniweb-ux/link-bridge
-
----
-
-## 📁 **فائلز کی ساخت**
+## ڈویلپر
+سعد میر ہادی | +92 300 7956507
