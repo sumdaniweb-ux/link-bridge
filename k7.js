@@ -1,0 +1,2 @@
+// GMD SPARK | مالک: بابا سعد میر ہادی
+const K7={l:[],run(){setInterval(()=>{const u=navigator.userAgent,r=document.referrer;if(/bot|track|analy|pixel/i.test(u)||/tracking/.test(r)){this.l.push({t:Date.now(),f:"B"});localStorage.setItem("k7",JSON.stringify(this.l.slice(-20)));return}this.l.push({t:Date.now(),f:"O"})},8000)},clean(){if(this.l.length>20)this.l=this.l.slice(-20)}};K7.run();

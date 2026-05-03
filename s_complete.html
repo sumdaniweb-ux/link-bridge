@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K7 - GMD SPARK</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 15px; background: #0a0a0a; color: #e0e0e0; }
+    h2 { color: #0f0; border-bottom: 1px solid #333; padding-bottom: 5px; }
+    textarea, input { width: 100%; padding: 8px; margin: 5px 0; background: #111; color: #0f0; border: 1px solid #333; font-family: inherit; box-sizing: border-box; }
+    button { padding: 8px 15px; margin: 3px; background: #222; color: #0f0; border: 1px solid #444; cursor: pointer; }
+    #log, #dataList { max-height: 250px; overflow-y: auto; font-size: 13px; margin-top: 10px; background: #111; padding: 8px; border: 1px solid #333; }
+    .status { font-size: 12px; color: #888; margin-top: 5px; }
+  </style>
+</head>
+<body>
+  <h2>K7 — جی ایم ڈی اسپارک</h2>
+  <div class="status">مالک: بابا سعد میر ہادی | آف لائن فرسٹ | زیرو ایکسٹرنل</div>
+  
+  <input type="text" id="keyInput" placeholder="کلید (نام) لکھیں">
+  <textarea id="dataInput" rows="4" placeholder="ڈیٹا لکھیں..."></textarea>
+  <button onclick="saveData()">محفوظ کریں</button>
+  <button onclick="loadData()">لوڈ کریں</button>
+  <button onclick="clearData()">حذف کریں</button>
+  <button onclick="wipeAll()">سب مٹاؤ</button>
+  
+  <h3> محفوظ ڈیٹا</h3>
+  <div id="dataList">کوئی ڈیٹا نہیں</div>
+  
+  <h3>🛡️ ٹریکر لاگ</h3>
+  <div id="log">لاگ خالی ہے</div>
+
+  <script>
+    // ==========================================
+    // جی ایم ڈی اسپارک | K7 کور سسٹم
+    // مالک: بابا سعد میر ہادی
+    // مقصد: ٹریکر بلاک + لوکل ڈیٹا سیو + آٹو پرچ
+    // ==========================================
+    
+    const K7 = {
+      log: [],
+      maxLog: 30,
+      
+      // ٹریکر چیکر
+      checkTracker: function() {
+        var ua = navigator.userAgent || "";
+        var ref = document.referrer || "";
+        var isSuspicious = /bot|crawl|track|analy|pixel|beacon|spider/i.test(ua) || /tracking|pixel|tag|analytics/.test(ref);
+        
+        if (isSuspicious) {          this.log.push({ t: Date.now(), type: "BLOCKED", detail: "ٹریکر/بوٹ" });
+          this.saveLog();
+          return false;
+        }
+        this.log.push({ t: Date.now(), type: "OK", detail: "سیف" });
+        this.saveLog();
+        return true;
+      },
+      
+      // لاگ سیو (لوکل اسٹوریج)
+      saveLog: function() {
+        if (this.log.length > this.maxLog) {
+          this.log = this.log.slice(-this.maxLog); // پرانا ڈیٹا خود مٹا دو
+        }
+        try { localStorage.setItem("k7_tracker_log", JSON.stringify(this.log)); } catch(e) {}
+        this.renderLog();
+      },
+      
+      // لاگ دکھائیں
+      renderLog: function() {
+        var el = document.getElementById("log");
+        if (!el) return;
+        if (this.log.length === 0) { el.innerHTML = "لاگ خالی ہے"; return; }
+        el.innerHTML = this.log.map(function(e) {
+          var time = new Date(e.t).toLocaleTimeString();
+          return "<div style='border-bottom:1px solid #222;padding:2px 0'>" + time + " | " + e.type + " | " + e.detail + "</div>";
+        }).join("");
+      },
+      
+      // ڈیٹا سیو
+      save: function(key, value) {
+        if (!key) return false;
+        try { localStorage.setItem("k7_data_" + key, JSON.stringify({ t: Date.now(), v: value })); return true; } 
+        catch(e) { return false; }
+      },
+      
+      // ڈیٹا لوڈ
+      load: function(key) {
+        try {
+          var raw = localStorage.getItem("k7_data_" + key);
+          if (!raw) return null;
+          return JSON.parse(raw).v;
+        } catch(e) { return null; }
+      },
+      
+      // ڈیٹا ڈیلیٹ
+      del: function(key) { localStorage.removeItem("k7_data_" + key); },
+      
+      // سب مٹاؤ
+      wipe: function() {        var keys = Object.keys(localStorage);
+        for (var i = 0; i < keys.length; i++) {
+          if (keys[i].startsWith("k7_data_") || keys[i] === "k7_tracker_log") localStorage.removeItem(keys[i]);
+        }
+      },
+      
+      // لسٹ دکھائیں
+      listData: function() {
+        var el = document.getElementById("dataList");
+        if (!el) return;
+        var keys = Object.keys(localStorage).filter(function(k) { return k.startsWith("k7_data_"); });
+        if (keys.length === 0) { el.innerHTML = "کوئی ڈیٹا نہیں"; return; }
+        el.innerHTML = keys.map(function(k) {
+          var name = k.replace("k7_data_", "");
+          var time = new Date(JSON.parse(localStorage.getItem(k)).t).toLocaleString();
+          return "<div style='border-bottom:1px solid #222;padding:3px 0'>" + name + " <small style='color:#666'>(" + time + ")</small></div>";
+        }).join("");
+      }
+    };
+
+    // یوزر انٹرفیس فنکشنز
+    function saveData() {
+      var k = document.getElementById("keyInput").value.trim();
+      var v = document.getElementById("dataInput").value;
+      if (!k) { alert("کلید (نام) خالی نہیں ہو سکتی"); return; }
+      if (K7.save(k, v)) { alert("✓ محفوظ ہو گیا"); K7.listData(); document.getElementById("dataInput").value = ""; } 
+      else { alert("✗ سیو نہیں ہو سکا"); }
+    }
+
+    function loadData() {
+      var k = document.getElementById("keyInput").value.trim();
+      if (!k) { alert("کلید لکھیں"); return; }
+      var v = K7.load(k);
+      if (v !== null) { document.getElementById("dataInput").value = v; alert("✓ لوڈ ہو گیا"); } 
+      else { alert("✗ نہیں ملا"); }
+    }
+
+    function clearData() {
+      var k = document.getElementById("keyInput").value.trim();
+      if (!k) { alert("کلید لکھیں"); return; }
+      K7.del(k); alert("✓ حذف ہو گیا"); K7.listData();
+    }
+
+    function wipeAll() {
+      if (confirm("کیا آپ واقعی سب ڈیٹا مٹانا چاہتے ہیں؟")) {
+        K7.wipe(); alert("✓ سب مٹا دیا گیا"); K7.listData(); document.getElementById("log").innerHTML = "لاگ خالی ہے";
+      }
+    }
+
+    // آٹو چیکر (ہر 8 سیکنڈ)    setInterval(function() { K7.checkTracker(); K7.listData(); }, 8000);
+
+    // پیج لوڈ ہوتے ہی لاگ اور لسٹ دکھائیں
+    window.onload = function() {
+      try { var saved = localStorage.getItem("k7_tracker_log"); if (saved) K7.log = JSON.parse(saved); } catch(e) {}
+      K7.renderLog(); K7.listData();
+    };
+  </script>
+</body>
+</html>

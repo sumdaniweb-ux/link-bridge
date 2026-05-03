@@ -1,0 +1,90 @@
+<!-- مالک: بابا سعد میر ہادی | جی ایم ڈی اسپارک -->
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K7 — جی ایم ڈی اسپارک</title>
+<style>
+  body{font-family:system-ui,sans-serif;margin:15px;background:#0a0a0a;color:#e0e0e0;line-height:1.6}
+  h2{color:#0f0;border-bottom:1px solid #333;padding-bottom:8px;margin:0 0 12px}
+  input,textarea{width:100%;padding:10px;margin:6px 0;background:#111;color:#0f0;border:1px solid #444;border-radius:4px;box-sizing:border-box;font-family:inherit}
+  button{padding:10px 15px;margin:4px 2px;background:#222;color:#0f0;border:1px solid #444;border-radius:4px;cursor:pointer}
+  button:hover{background:#333}
+  .box{background:#111;border:1px solid #333;border-radius:4px;padding:10px;margin-top:10px;max-height:200px;overflow-y:auto}
+  .item{padding:6px 0;border-bottom:1px solid #222;font-size:14px}
+  .status{font-size:12px;color:#888;margin:5px 0}
+</style>
+</head>
+<body>
+
+<h2>🛡️ K7 — جی ایم ڈی اسپارک</h2>
+<div class="status">مالک: بابا سعد میر ہادی | آف لائن فرسٹ | زیرو ایکسٹرنل</div>
+
+<input type="text" id="key" placeholder="کلید (نام) لکھیں">
+<textarea id="val" rows="3" placeholder="ڈیٹا لکھیں..."></textarea>
+
+<div>
+  <button onclick="save()">محفوظ</button>
+  <button onclick="load()">لوڈ</button>
+  <button onclick="del()">حذف</button>
+  <button onclick="wipe()">سب مٹاؤ</button>
+</div>
+
+<h3>📦 محفوظ ڈیٹا</h3>
+<div id="list" class="box">کوئی ڈیٹا نہیں</div>
+
+<h3>🔍 ٹریکر لاگ</h3>
+<div id="log" class="box">لاگ خالی ہے</div>
+
+<script>
+// جی ایم ڈی اسپارک | K7 کور
+// مالک: بابا سعد میر ہادی
+// مقصد: ٹریکر روکنا + ڈیٹا سیو (لوکل)
+
+const K7 = {
+  log: [], maxLog: 25, p: "k7_",
+  
+  check() {
+    const ua = navigator.userAgent || "", ref = document.referrer || "";
+    const bad = /bot|crawl|track|analy|pixel|beacon|spider/i.test(ua) || /tracking|pixel|tag|analytics/i.test(ref);
+    this.log.push({t: Date.now(), s: bad ? "BLOCKED" : "OK"});
+    if(this.log.length > this.maxLog) this.log = this.log.slice(-this.maxLog);
+    try { localStorage.setItem(this.p + "log", JSON.stringify(this.log)); } catch(e){}
+    this.showLog();
+  },
+  
+  showLog() {
+    const el = document.getElementById("log");
+    if(!el) return;
+    if(this.log.length === 0) { el.innerHTML = "لاگ خالی ہے"; return; }
+    el.innerHTML = this.log.map(e => `<div class="item">${new Date(e.t).toLocaleTimeString()} | ${e.s}</div>`).join("");
+  },
+  
+  save(k, v) { if(!k) return false; try { localStorage.setItem(this.p + k, JSON.stringify({t: Date.now(), v})); return true; } catch(e){ return false; } },
+  load(k) { try { const r = JSON.parse(localStorage.getItem(this.p + k)); return r ? r.v : null; } catch(e){ return null; } },
+  del(k) { localStorage.removeItem(this.p + k); },
+  wipe() { Object.keys(localStorage).filter(x => x.startsWith(this.p)).forEach(x => localStorage.removeItem(x)); },
+  
+  list() {
+    const el = document.getElementById("list");
+    if(!el) return;
+    const keys = Object.keys(localStorage).filter(k => k.startsWith(this.p) && k !== this.p + "log");
+    if(keys.length === 0) { el.innerHTML = "کوئی ڈیٹا نہیں"; return; }
+    el.innerHTML = keys.map(k => {
+      const n = k.replace(this.p, ""), t = new Date(JSON.parse(localStorage.getItem(k)).t).toLocaleString();
+      return `<div class="item">${n} <small style="color:#666">(${t})</small></div>`;
+    }).join("");
+  }
+};
+
+function save(){ const k=document.getElementById("key").value.trim(), v=document.getElementById("val").value; if(!k){alert("کلید خالی نہیں");return} if(K7.save(k,v)){alert("✓ محفوظ");K7.list();document.getElementById("val").value=""}else{alert("✗ سیو نہیں ہوا")} }
+function load(){ const k=document.getElementById("key").value.trim(); if(!k){alert("کلید لکھیں");return} const v=K7.load(k); if(v!==null){document.getElementById("val").value=v;alert("✓ لوڈ")}else{alert("✗ نہیں ملا")} }
+function del(){ const k=document.getElementById("key").value.trim(); if(!k){alert("کلید لکھیں");return} K7.del(k); alert("✓ حذف"); K7.list(); }
+function wipe(){ if(confirm("کیا آپ واقعی سب مٹانا چاہتے ہیں؟")){ K7.wipe(); alert("✓ سب مٹا دیا گیا"); K7.list(); document.getElementById("log").innerHTML="لاگ خالی ہے"; } }
+
+setInterval(() => K7.check(), 7000);
+window.onload = () => { try{ const s=localStorage.getItem(K7.p+"log"); if(s) K7.log=JSON.parse(s); }catch(e){} K7.showLog(); K7.list(); };
+</script>
+</body>
+</html>

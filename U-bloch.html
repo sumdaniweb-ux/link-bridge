@@ -1,0 +1,20 @@
+<!DOCTYPE html><html lang="ur" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GMD U-Block Secure</title>
+<style>body{font-family:system-ui;margin:12px;background:#000;color:#0f0}h1{border-bottom:1px solid #333;padding-bottom:8px}.panel{background:#0a0a0a;border:1px solid #222;padding:10px;margin:8px 0;border-radius:5px}input,button{width:100%;padding:10px;margin:4px 0;background:#111;color:#0f0;border:1px solid #333;border-radius:4px;box-sizing:border-box}button{background:#1a1a1a;cursor:pointer}.log{height:150px;overflow-y:auto;font-size:12px;background:#050505;padding:8px;border:1px solid #222}.item{padding:3px 0;border-bottom:1px solid #111}.blocked{color:#f44336}.safe{color:#4caf50}.badge{display:inline-block;padding:2px 6px;background:#2e7d32;color:#fff;border-radius:3px;font-size:10px}</style></head><body>
+<h1>🛡️ GMD U-Block Secure</h1>
+<div class="panel"><div class="badge">آف لائن</div> <div class="badge">لوکل بلاکر</div>
+<input id="u" placeholder="URL/ڈومین ٹیسٹ کریں (جیسے: tracker.example.com)">
+<button onclick="chk()">🔍 چیک/بلاک</button><button onclick="add()">➕ نیا بلاک</button><button onclick="clr()">🧹 صاف</button></div>
+<div class="panel"><h3>📊 ڈیش بورڈ</h3><div id="st">بلاکڈ: 0 | محفوظ: 0</div></div>
+<div class="panel"><h3>📜 لاگ</h3><div class="log" id="lg">انتظار...</div></div>
+<script>
+const UB={bl:[/tracker/i,/analytics/i,/pixel/i,/beacon/i,/adservice/i,/doubleclick/i,/googletag/i,/hotjar/i,/mixpanel/i],cb:[],log:[],s:{b:0,a:0},
+is(u){if(!u)return false;const v=u.toLowerCase();for(let r of UB.bl)if(r.test(v))return true;for(let r of UB.cb)if(r.test(v))return true;return false},
+chk(u){const k=UB.is(u);if(k)UB.s.b++;else UB.s.a++;UB.log.unshift({t:Date.now(),u,s:k?"BLOCK":"SAFE"});if(UB.log.length>50)UB.log.pop();UB.r();return k},
+add(p){try{UB.cb.push(new RegExp(p,"i"));alert("✓ شامل")}catch(e){alert("✗ غلط فارمیٹ")}},
+r(){document.getElementById("st").innerHTML=`بلاکڈ: ${UB.s.b} | محفوظ: ${UB.s.a}`;document.getElementById("lg").innerHTML=UB.log.map(e=>`<div class="item ${e.s==="BLOCK"?"blocked":"safe"}">${new Date(e.t).toLocaleTimeString()} | ${e.s} | ${e.u}</div>`).join("")},
+c(){UB.log=[];UB.s={b:0,a:0};UB.r()}};
+function chk(){const u=document.getElementById("u").value.trim();if(!u)return alert("URL لکھیں");alert(UB.chk(u)?"🚫 بلاک":"✅ محفوظ")}
+function add(){const p=prompt("ریجیکس/ڈومین:");if(p)UB.add(p)}
+function clr(){UB.c()}
+window.onload=UB.r;
+</script></body></html>

@@ -1,2 +1,21 @@
-# link-bridge
-🔗 Link Bridge | Secure file upload &amp; AI chat assistant. Responsive, API-integrated web app built with HTML/CSS/JS. Optimized for mobile &amp; GitHub Pages.
+# K7 — جی ایم ڈی اسپارک
+> مالک: بابا سعد میر ہادی  
+> مقصد: آف لائن ڈاک + لوکل ٹریکنگ + شیلڈ پروٹیکشن  
+> اصول: زیرو ایکسٹرنل کالز، سب کچھ آپ کے پاس
+
+## نئی فائلیں
+- `k7_shield.js` — GPS، کوکیز، ڈیوائس آئی ڈی، یو اے کو بلاک/موک کرتا ہے
+- `k7_monitor.html` — بلاکڈ ٹریکنگ لاگ دیکھیں
+- `k7_inject.js` — ہائبرڈ ایپس/ویو میں خودکار انجیکشن
+
+## استعمال
+1. تینوں فائلیں `index.html` کے ساتھ رکھیں
+2. `<script src="k7_shield.js"></script>` ہیڈ میں ڈالیں
+3. `k7_monitor.html` کھولیں → لاگ دیکھیں
+4. ہائبرڈ ایپ میں `k7_inject.js` لوڈ کریں
+
+## سیکیورٹی
+✓ لاگ 50 کے بعد خود صاف  
+✓ کوئی نیٹ ورک کال نہیں  
+✓ فرضی ڈیٹا ریٹرن کرتا ہے تاکہ ایپ کریش نہ ہو  
+✓ گٹ پر محفوظ
