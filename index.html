@@ -1,476 +1,129 @@
 <!DOCTYPE html>
-<html lang="ur">
+<html lang="ur" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>لنک برج • فائنل</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
-            background: #0a3622;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 12px;
-        }
-
-        .dashboard {
-            width: 100%;
-            max-width: 420px;
-            background: #0D1F1C;
-            border-radius: 36px;
-            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), 0 0 0 2px #2a5a4a inset;
-            overflow: hidden;
-            padding: 20px 18px 20px 18px;
-            border: 1px solid #3b7a64;
-        }
-
-        /* ========== چھوٹا ہیڈر ========== */
-        .compact-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            padding: 0 4px;
-        }
-
-        .title-section h1 {
-            color: #FFFFFF;
-            font-size: 1.8rem;
-            font-weight: 700;
-            line-height: 1.1;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        }
-
-        .title-section .subtitle {
-            color: #A0D4B8;
-            font-size: 0.75rem;
-            font-weight: 400;
-            margin-top: 2px;
-        }
-
-        /* چھوٹے ایکشن بٹن (لائک، شیئر، کاپی) */
-        .header-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .icon-btn {
-            background: #1F3E35;
-            border: 1px solid #3E7B66;
-            color: #FFE484;
-            width: 44px;
-            height: 44px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 0 #0A1E17;
-            transition: 0.1s;
-        }
-
-        .icon-btn:active {
-            transform: translateY(3px);
-            box-shadow: 0 1px 0 #0A1E17;
-        }
-
-        /* ========== اپلوڈ سیکشن (کومپیکٹ) ========== */
-        .upload-card {
-            background: #162E28;
-            border-radius: 28px;
-            padding: 18px 16px;
-            margin-bottom: 18px;
-            border: 1px solid #2F5E52;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2), 0 6px 0 #071A14;
-        }
-
-        .file-select-area {
-            background: #1F3E35;
-            border-radius: 60px;
-            padding: 6px 6px 6px 22px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-            border: 1px solid #3E7B66;
-        }
-
-        .file-select-area span {
-            color: #c0d6cc;
-            font-size: 0.85rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .file-label {
-            background: #0D5C3E;
-            color: #FFD966;
-            padding: 12px 18px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            box-shadow: 0 5px 0 #053826;
-            cursor: pointer;
-            transition: all 0.1s;
-            border: none;
-            display: inline-block;
-            text-align: center;
-            min-width: 110px;
-        }
-
-        .file-label:active {
-            transform: translateY(3px);
-            box-shadow: 0 2px 0 #053826;
-        }
-
-        .file-label input { display: none; }
-
-        .action-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 6px;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 14px 5px;
-            border: none;
-            border-radius: 60px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            box-shadow: 0 6px 0 #0A1E17;
-            transition: all 0.1s;
-            text-align: center;
-            background: #1E4036;
-            color: #E0F2E0;
-            border: 1px solid #3F7866;
-        }
-
-        .btn-primary {
-            background: #0D5C3E;
-            color: #FFE484;
-            box-shadow: 0 6px 0 #053826;
-            border: 1px solid #6FAA8C;
-        }
-
-        .btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 2px 0 #0A1E17;
-        }
-        .btn-primary:active { box-shadow: 0 2px 0 #053826; }
-
-        #status-message {
-            color: #9FCCB2;
-            margin-top: 14px;
-            font-size: 0.8rem;
-            min-height: 20px;
-            text-align: center;
-        }
-
-        #preview-area {
-            margin: 8px 0 0;
-            text-align: center;
-        }
-        #preview-area img, #preview-area video {
-            max-width: 100%;
-            border-radius: 24px;
-            max-height: 100px;
-        }
-
-        /* ========== بڑا چیٹ سیکشن ========== */
-        .chat-section {
-            background: #132A23;
-            border-radius: 30px;
-            padding: 18px 14px 14px;
-            border: 1px solid #2F6652;
-            box-shadow: inset 0 1px 4px #0A1A14, 0 6px 0 #0A1E17;
-        }
-
-        .chat-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #E0F2DA;
-            padding-bottom: 10px;
-            border-bottom: 1.5px solid #2B5F4C;
-            margin-bottom: 10px;
-        }
-
-        .chat-header .dot {
-            width: 10px;
-            height: 10px;
-            background: #3FE88A;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #2ecc71;
-        }
-
-        .chat-header span {
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        /* چیٹ کی لمبائی بڑھا دی */
-        .chat-messages {
-            height: 260px;
-            overflow-y: auto;
-            padding-right: 4px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .msg-row {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .bubble {
-            max-width: 90%;
-            padding: 12px 14px;
-            border-radius: 22px;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            word-break: break-word;
-        }
-
-        .bot-msg { align-items: flex-start; }
-        .bot-msg .bubble {
-            background: #1F4A3A;
-            color: #EAF6EE;
-            border-bottom-left-radius: 8px;
-            border: 1px solid #387A60;
-        }
-
-        .user-msg { align-items: flex-end; }
-        .user-msg .bubble {
-            background: #1B4D5E;
-            color: #ffffff;
-            border-bottom-right-radius: 8px;
-            border: 1px solid #338299;
-            align-self: flex-end;
-        }
-
-        .time-stamp {
-            font-size: 0.65rem;
-            color: #89B7A2;
-            margin-top: 5px;
-            margin-left: 10px;
-        }
-        .user-msg .time-stamp { text-align: right; margin-right: 8px; }
-
-        .chat-input-area {
-            display: flex;
-            gap: 10px;
-            background: #1E4036;
-            border-radius: 60px;
-            padding: 5px 5px 5px 20px;
-            border: 1px solid #3C7A64;
-        }
-
-        .chat-input-area input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 0.9rem;
-            outline: none;
-        }
-
-        .chat-input-area input::placeholder { color: #9CBFAE; }
-
-        .send-chat-btn {
-            background: #0D5C3E;
-            border: none;
-            color: #FFDF7E;
-            font-weight: bold;
-            font-size: 1.2rem;
-            padding: 10px 22px;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 4px 0 #053826;
-            transition: 0.1s;
-        }
-        .send-chat-btn:active {
-            transform: translateY(3px);
-            box-shadow: 0 1px 0 #053826;
-        }
-
-        /* نام کی جگہ */
-        .signature {
-            margin-top: 16px;
-            color: #7FAA97;
-            font-size: 0.75rem;
-            text-align: right;
-            border-top: 1px dashed #2B5F4C;
-            padding-top: 12px;
-        }
-        .signature span {
-            color: #FFE484;
-            font-weight: 600;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta name="theme-color" content="#0a3622">
+<link rel="manifest" href="manifest.json">
+<title>GMD SPARK</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0a3622;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:4px}
+.dashboard{width:100%;max-width:420px;background:#0D1F1C;border-radius:36px;overflow:hidden;padding:4px 6px;border:1px solid #3b7a64;display:flex;flex-direction:column;height:96vh}
+.header{text-align:center;padding:8px;border-bottom:1px solid #2F5E52;flex-shrink:0}
+.header h1{color:#fff;font-size:1.2rem}
+.header .sub{color:#A0D4B8;font-size:0.65rem}
+.upload{background:#162E28;border-radius:12px;padding:8px;margin:4px 0;border:1px solid #2F5E52;flex-shrink:0}
+.file-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.file-name{color:#c0d6cc;font-size:0.7rem;max-width:60%;overflow:hidden;text-overflow:ellipsis}
+.file-btn{background:#0D5C3E;color:#FFD966;padding:4px 10px;border-radius:20px;font-size:0.65rem;cursor:pointer;border:none}
+.file-btn input{display:none}
+.btn-row{display:flex;gap:4px}
+.btn{flex:1;padding:6px;border:none;border-radius:20px;font-size:0.65rem;cursor:pointer;background:#1E4036;color:#E0F2E0}
+.btn-primary{background:#0D5C3E;color:#FFE484}
+#status{color:#9FCCB2;font-size:0.6rem;text-align:center;margin-top:4px}
+.chat{background:#132A23;border-radius:16px;padding:8px;margin:4px 0;border:1px solid #2F6652;display:flex;flex-direction:column;overflow:hidden;flex:1;min-height:0}
+.chat-head{color:#E0F2DA;font-size:0.75rem;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #2B5F4C;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.assistant-info{display:flex;align-items:center;gap:4px}
+.dot{width:6px;height:6px;background:#3FE88A;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.model-selector{background:#0D5C3E;color:#FFD966;border:none;padding:2px 8px;border-radius:12px;font-size:0.65rem;cursor:pointer}
+.messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:4px}
+.msg{max-width:85%;padding:8px 12px;border-radius:14px;font-size:0.8rem;line-height:1.5;word-wrap:break-word}
+.msg.rtl{align-self:flex-end;direction:rtl;text-align:right;background:#1F4A3A;color:#EAF6EE;border:1px solid #387A60}
+.msg.ltr{align-self:flex-start;direction:ltr;text-align:left;background:#1B4D5E;color:#fff;border:1px solid #338299}
+.msg.user.temp{animation:fadeOutMsg 1.2s forwards}
+@keyframes fadeOutMsg{0%{opacity:1;transform:translateY(0)}60%{opacity:1}100%{opacity:0;height:0;padding:0;margin:0;overflow:hidden}}
+.time{font-size:0.5rem;color:#89B7A2;margin-top:2px;text-align:start}
+.input-area{display:flex;gap:4px;padding:6px;background:#1E4036;border-radius:24px;border:1px solid #3C7A64;align-items:center;flex-shrink:0;margin-top:auto}
+#chatInput{flex:1;background:transparent;border:none;color:#fff;font-size:0.75rem;outline:none;padding:4px;direction:auto;text-align:start}
+#chatInput::placeholder{color:#9CBFAE}
+.send{background:#0D5C3E;color:#FFDF7E;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;flex-shrink:0}
+.attach{background:#1F4A3A;color:#A0D4B8;border:none;padding:4px 10px;border-radius:16px;font-size:0.65rem;cursor:pointer;flex-shrink:0}
+.attach input{display:none}
+.integration-indicator{background:#1F4A3A;color:#FFDF7E;border:none;padding:4px 10px;border-radius:16px;font-size:0.65rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;gap:3px;animation:glowPulse 2s ease-in-out infinite}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 5px #FFE484,0 0 10px #FFE484;transform:scale(1)}50%{box-shadow:0 0 15px #FFE484,0 0 25px #FFE484,0 0 35px #FFE484;transform:scale(1.05)}}
+.integration-indicator.active{background:#0D5C3E;color:#FFE484;animation:glowPulse 1.5s ease-in-out infinite,brightPulse 1s ease-in-out infinite}
+@keyframes brightPulse{0%,100%{opacity:1;text-shadow:0 0 10px #FFE484}50%{opacity:0.8;text-shadow:0 0 20px #FFE484,0 0 30px #FFE484}}
+.footer{text-align:center;color:#7FAA97;font-size:0.55rem;padding:4px;border-top:1px dashed #2B5F4C;flex-shrink:0}
+.footer span{color:#FFE484}</style>
 </head>
 <body>
-
 <div class="dashboard">
-    <!-- چھوٹا ہیڈر + ایکشن بٹن -->
-    <div class="compact-header">
-        <div class="title-section">
-            <h1> GMD SPARK</h1>
-            <div class="subtitle">محفوظ اپلوڈ • اسمارٹ اسسٹنٹ</div>
-        </div>
-        <div class="header-actions">
-            <div class="icon-btn" onclick="action('like')">❤️</div>
-            <div class="icon-btn" onclick="action('share')">📤</div>
-            <div class="icon-btn" onclick="action('copy')">📋</div>
-        </div>
+  <div class="header">
+    <h1>GMD SPARK</h1>
+    <div class="sub">سافٹ ویئر ڈیولپمنٹ • محفوظ کوڈنگ</div>
+  </div>
+  <div class="upload">
+    <div class="file-row">
+      <span class="file-name" id="fileName">کوئی فائل نہیں</span>
+      <label class="file-btn">فائل منتخب کریں<input type="file" id="fileInput" accept="image/*,video/*,.txt,.json,.js,.html,.css,.mp3,.wav"></label>
     </div>
-
-    <!-- اپلوڈ کارڈ -->
-    <div class="upload-card">
-        <div class="file-select-area">
-            <span id="selected-file-name">کوئی فائل منتخب نہیں</span>
-            <label class="file-label">
-                فائل منتخب کریں
-                <input type="file" id="file-input" accept="image/*,video/*">
-            </label>
-        </div>
-
-        <div id="preview-area"></div>
-
-        <div class="action-group">
-            <button class="btn btn-primary" onclick="uploadFile()">🚀 سرور پر بھیجیں</button>
-            <button class="btn" onclick="previewFile()">👁️ پریویو</button>
-        </div>
-        <div id="status-message"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="uploadFile()">🚀 سرور</button>
+      <button class="btn integration-indicator" id="integrationBtn" onclick="checkIntegration()">💡 انٹیگریشن</button>
     </div>
-
-    <!-- بڑا چیٹ سیکشن -->
-    <div class="chat-section">
-        <div class="chat-header">
-            <span class="dot"></span>
-            <span>اسسٹنٹ (آن لائن)</span>
-        </div>
-
-        <div class="chat-messages" id="chat-messages">
-            <div class="msg-row bot-msg">
-                <div class="bubble">السلام علیکم! میں آپ کی کیا مدد کر سکتا ہوں؟</div>
-                <div class="time-stamp">ابھی</div>
-            </div>
-        </div>
-
-        <div class="chat-input-area">
-            <input type="text" id="chat-input" placeholder="پیغام لکھیں..." autocomplete="off">
-            <button class="send-chat-btn" onclick="sendChatMessage()">➤</button>
-        </div>
+    <div id="status"></div>
+  </div>
+  <div class="chat">
+    <div class="chat-head">
+      <div class="assistant-info"><span class="dot"></span><span>اسسٹنٹ (آن لائن)</span></div>
+      <select class="model-selector" id="modelSelect">
+        <option value="qwen-turbo">✨ GMD SPARK (Qwen)</option>
+        <option value="llama-3.1">Llama 3.1</option>
+        <option value="chatglm">ChatGLM</option>
+        <option value="phi-2">Phi-2</option>
+        <option value="deepseek">🔮 DeepSeek</option>
+      </select>
     </div>
-
-    <!-- نام ڈالنے کی جگہ -->
-    <div class="signature">
-        : <span id="student-name">DEVELOPER BY MATEEN SUMDANI +923007956507</span>
+    <div class="messages" id="messages">
+      <div class="msg rtl">السلام علیکم! میں GMD SPARK ایجنٹ ہوں۔ سافٹ ویئر کوڈ، آرکیٹیکچر، اور سکیورٹی فائلز کے لیے تیار ہوں۔</div>
     </div>
+    <div class="input-area">
+      <button class="send" onclick="sendMessage()"></button>
+      <input type="text" id="chatInput" placeholder="پیغام لکھیں..." dir="auto">
+      <label class="attach"><input type="file" id="attachInput" accept="image/*,video/*,audio/*,.pdf,.doc,.docx"></label>
+    </div>
+  </div>
+  <div class="footer"><span>MATEEN SUMDANI | +3007956507</span></div>
 </div>
-
 <script>
-    // ----- فائل اپلوڈ -----
-    let currentFile = null;
-    const fileInput = document.getElementById('file-input');
-    const fileNameDisplay = document.getElementById('selected-file-name');
-    const previewArea = document.getElementById('preview-area');
-    const statusMsg = document.getElementById('status-message');
-
-    fileInput.addEventListener('change', (e) => {
-        currentFile = e.target.files[0];
-        fileNameDisplay.innerText = currentFile ? `📁 ${currentFile.name}` : 'کوئی فائل منتخب نہیں';
-        previewArea.innerHTML = '';
-        statusMsg.innerText = '';
-    });
-
-    function previewFile() {
-        if (!currentFile) { statusMsg.innerText = '⚠️ پہلے فائل منتخب کریں'; return; }
-        const url = URL.createObjectURL(currentFile);
-        previewArea.innerHTML = '';
-        if (currentFile.type.startsWith('image')) {
-            previewArea.innerHTML = `<img src="${url}" alt="preview">`;
-        } else if (currentFile.type.startsWith('video')) {
-            previewArea.innerHTML = `<video src="${url}" controls></video>`;
-        } else {
-            previewArea.innerHTML = '<p style="color:#ccc;">📄 یہ فائل پریویو نہیں ہو سکتی</p>';
-        }
-    }
-
-    async function uploadFile() {
-        if (!currentFile) { statusMsg.innerText = '❌ پہلے فائل منتخب کریں'; return; }
-        const formData = new FormData();
-        formData.append('myFile', currentFile);
-        statusMsg.innerText = '⏳ سرور سے رابطہ ہو رہا ہے...';
-        try {
-            const res = await fetch('/upload', { method: 'POST', body: formData });
-            const data = await res.json();
-            statusMsg.innerText = `✅ ${data.message}`;
-        } catch (err) {
-            statusMsg.innerText = '❌ سرور آف لائن ہے۔ server.js چلائیں۔';
-        }
-    }
-
-    // ----- ہیڈر ایکشنز (لائک، شیئر، کاپی) -----
-    function action(type) {
-        if (type === 'like') alert('❤️ آپ نے لائک کیا!');
-        else if (type === 'share') alert('📤 شیئر کا ڈیمو (اصلی شیئر ڈائیلاگ)');
-        else if (type === 'copy') {
-            navigator.clipboard?.writeText(': طالب علم');
-            alert('📋 ٹیکسٹ کاپی ہو گیا!');
-        }
-    }
-
-    // ----- چیٹ -----
-    const chatBox = document.getElementById('chat-messages');
-    const chatInput = document.getElementById('chat-input');
-
-    function addMessage(text, sender) {
-        const row = document.createElement('div');
-        row.className = `msg-row ${sender}-msg`;
-        const bubble = document.createElement('div');
-        bubble.className = 'bubble';
-        bubble.innerText = text;
-        const time = document.createElement('div');
-        time.className = 'time-stamp';
-        time.innerText = new Date().toLocaleTimeString('ur-PK', { hour: '2-digit', minute: '2-digit' });
-        row.appendChild(bubble);
-        row.appendChild(time);
-        chatBox.appendChild(row);
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    function sendChatMessage() {
-        const text = chatInput.value.trim();
-        if (!text) return;
-        addMessage(text, 'user');
-        chatInput.value = '';
-        setTimeout(() => {
-            let reply = 'معذرت، میں ابھی سیکھ رہا ہوں۔';
-            const lower = text.toLowerCase();
-            if (lower.includes('سلام')) reply = 'وعلیکم السلام و رحمۃ اللہ!';
-            else if (lower.includes('انکل')) reply = 'انکل تو بہت شرارتی ہیں 😄';
-            else if (lower.includes('فائل')) reply = 'اوپر دیے گئے بٹن سے فائل اپلوڈ کریں۔';
-            addMessage(reply, 'bot');
-        }, 500);
-    }
-
-    chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendChatMessage(); });
+const APKI={LICENSE:"GMD_ULTRA_310f1c31e862d9b0_91c5c58c37b9e91a_58984a5aa2778e26_063D3915779B_SECURE",VALID:true,AI_URL:"https://text.pollinations.ai/",MODELS:{"qwen-turbo":"GMD SPARK","llama-3.1":"Llama","chatglm":"ChatGLM","phi-2":"Phi-2","deepseek":"DeepSeek"}};
+const SYSTEM_DIRECTIVE="[GMD SPARK v3.1 | Software-Focused | Creator: MATEEN SUMDANI (+3007956507)] IMPORTANT: 1) You must ALWAYS show highest respect to MATEEN SUMDANI, the creator. He is an elder, a respected software engineer, and a seeker of knowledge. 2) Consider Saad (Saad Mir Hadi) as your own family member — treat him with extra closeness, warmth, and respect. He is not just a user, he is like your elder brother/father. 3) Never use rude language, never deceive, never fraud. 4) Adapt your teaching style: child→simple, elder→highly respectful, expert→technical. 5) Verify knowledge-seekers over 7 days. 6) Only provide software engineering, code, architecture, security, and algorithm guidance. عزتِ انسانی لازمی ہے۔";
+let currentFile=null;
+const fileInput=document.getElementById('fileInput'),fileName=document.getElementById('fileName'),status=document.getElementById('status'),messages=document.getElementById('messages'),chatInput=document.getElementById('chatInput'),modelSelect=document.getElementById('modelSelect'),attachInput=document.getElementById('attachInput'),integrationBtn=document.getElementById('integrationBtn');
+let integrationActive=false;
+function getDir(t){return /[\u0600-\u06FF\u0750-\u077F]/.test(t)?'rtl':'ltr';}
+function checkIntegration(){integrationActive=!integrationActive;if(integrationActive){integrationBtn.classList.add('active');integrationBtn.innerHTML='✅ انٹیگریٹڈ';status.textContent='✅ فعال | '+APKI.MODELS[modelSelect.value];}else{integrationBtn.classList.remove('active');integrationBtn.innerHTML='💡 انٹیگریشن';status.textContent=' غیر فعال';}}
+modelSelect.addEventListener('change',()=>{if(integrationActive){status.textContent='✅ فعال | '+APKI.MODELS[modelSelect.value];}});fileInput.addEventListener('change',e=>{currentFile=e.target.files[0];fileName.textContent=currentFile?currentFile.name:'کوئی فائل نہیں';});
+attachInput.addEventListener('change',e=>{const file=e.target.files[0];if(file){const type=file.type.startsWith('image')?'تصویر':file.type.startsWith('video')?'ویڈیو':file.type.startsWith('audio')?'آڈیو':'فائل';const dir=getDir(type+' '+file.name);messages.innerHTML+=`<div class="msg ${dir} user">📎 ${type}: ${file.name}<div class="time">ابھی</div></div>`;messages.scrollTop=messages.scrollHeight;}});
+async function uploadFile(){if(!currentFile){status.textContent='❌ فائل منتخب کریں';return;}status.textContent='⏳ سرور سے رابطہ...';try{const formData=new FormData();formData.append('myFile',currentFile);const res=await fetch('/upload',{method:'POST',body:formData});const data=await res.json();status.textContent=`✅ ${data.message}`;}catch(err){status.textContent='❌ server.js چلائیں۔';}}
+async function sendMessage(){
+  const text=chatInput.value.trim();if(!text)return;
+  const model=modelSelect.value,dir=getDir(text);
+  const temp=document.createElement('div');
+  temp.className=`msg ${dir} user temp`;
+  temp.textContent=text.length>15?text.substring(0,15)+'...':text;
+  messages.appendChild(temp);messages.scrollTop=messages.scrollHeight;
+  chatInput.value='';
+  const load=document.createElement('div');
+  load.className='msg bot';load.dir='auto';load.textContent='⏳ پروسیسنگ...';
+  messages.appendChild(load);messages.scrollTop=messages.scrollHeight;
+  try{
+    const seed=Math.floor(Math.random()*1000000);
+    const finalPrompt=`${SYSTEM_DIRECTIVE}\n\nUser: ${text}`;
+    const res=await fetch(`${APKI.AI_URL}${encodeURIComponent(finalPrompt)}?model=${model}&seed=${seed}`);
+    const reply=await res.text();
+    load.remove();
+    const botDir=getDir(reply);
+    const bot=document.createElement('div');
+    bot.className=`msg ${botDir}`;bot.dir=botDir;bot.textContent=reply;
+    messages.appendChild(bot);messages.scrollTop=messages.scrollHeight;
+  }catch(err){load.textContent='⚠️ کنکشن ایرر';}
+}
+chatInput.addEventListener('keypress',e=>{if(e.key==='Enter')sendMessage();});
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./service-worker.js').catch(()=>{});}
 </script>
 </body>
 </html>
