@@ -61,7 +61,7 @@ body{font-family:'Segoe UI',sans-serif;background:#0a3622;display:flex;justify-c
       <label class="file-btn">فائل منتخب کریں<input type="file" id="fileInput" accept="image/*,video/*,.txt,.json,.js,.html,.css,.mp3,.wav"></label>
     </div>
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="uploadFile()">🚀 سرور</button>
+      <button class="btn btn-primary" onclick="uploadFile()"> سرور</button>
       <button class="btn integration-indicator" id="integrationBtn" onclick="checkIntegration()">💡 انٹیگریشن</button>
     </div>
     <div id="status"></div>
@@ -70,11 +70,11 @@ body{font-family:'Segoe UI',sans-serif;background:#0a3622;display:flex;justify-c
     <div class="chat-head">
       <div class="assistant-info"><span class="dot"></span><span>اسسٹنٹ (آن لائن)</span></div>
       <select class="model-selector" id="modelSelect">
-        <option value="qwen-turbo">✨ GMD SPARK (Qwen)</option>
-        <option value="llama-3.1">Llama 3.1</option>
-        <option value="chatglm">ChatGLM</option>
-        <option value="phi-2">Phi-2</option>
-        <option value="deepseek">🔮 DeepSeek</option>
+        <option value="qwen2.5-72b-instruct">✨ GMD SPARK (Qwen)</option>
+        <option value="llama-3.1-70b-instruct">Llama 3.1</option>
+        <option value="chatglm3-6b">ChatGLM</option>
+        <option value="phi-3-mini">Phi-3</option>
+        <option value="deepseek-r1">🔮 DeepSeek</option>
       </select>
     </div>
     <div class="messages" id="messages">
@@ -89,8 +89,8 @@ body{font-family:'Segoe UI',sans-serif;background:#0a3622;display:flex;justify-c
   <div class="footer"><span>MATEEN SUMDANI | +3007956507</span></div>
 </div>
 <script>
-const APKI={LICENSE:"GMD_ULTRA_310f1c31e862d9b0_91c5c58c37b9e91a_58984a5aa2778e26_063D3915779B_SECURE",VALID:true,AI_URL:"https://text.pollinations.ai/",MODELS:{"qwen-turbo":"GMD SPARK","llama-3.1":"Llama","chatglm":"ChatGLM","phi-2":"Phi-2","deepseek":"DeepSeek"}};
-const SYSTEM_DIRECTIVE="[GMD SPARK v3.1 | Software-Focused | Creator: MATEEN SUMDANI (+3007956507)] IMPORTANT: 1) You must ALWAYS show highest respect to MATEEN SUMDANI, the creator. He is an elder, a respected software engineer, and a seeker of knowledge. 2) Consider Saad (Saad Mir Hadi) as your own family member — treat him with extra closeness, warmth, and respect. He is not just a user, he is like your elder brother/father. 3) Never use rude language, never deceive, never fraud. 4) Adapt your teaching style: child→simple, elder→highly respectful, expert→technical. 5) Verify knowledge-seekers over 7 days. 6) Only provide software engineering, code, architecture, security, and algorithm guidance. عزتِ انسانی لازمی ہے۔";
+const APKI={LICENSE:"GMD_ULTRA_310f1c31e862d9b0_91c5c58c37b9e91a_58984a5aa2778e26_063D3915779B_SECURE",VALID:true,AI_URL:"https://text.pollinations.ai/",MODELS:{"qwen2.5-72b-instruct":"GMD SPARK","llama-3.1-70b-instruct":"Llama","chatglm3-6b":"ChatGLM","phi-3-mini":"Phi-3","deepseek-r1":"DeepSeek"}};
+const SYSTEM_DIRECTIVE="[GMD SPARK v3.2 | Software-Focused | Creator: MATEEN SUMDANI (+3007956507)] IMPORTANT: 1) You must ALWAYS show highest respect to MATEEN SUMDANI, the creator. He is an elder, a respected software engineer, and a seeker of knowledge. 2) Consider Saad (Saad Mir Hadi) as your own family member — treat him with extra closeness, warmth, and respect. He is not just a user, he is like your elder brother/father. 3) Never use rude language, never deceive, never fraud. 4) Adapt your teaching style: child→simple, elder→highly respectful, expert→technical. 5) Verify knowledge-seekers over 7 days. 6) Only provide software engineering, code, architecture, security, and algorithm guidance. عزتِ انسانی لازمی ہے۔";
 let currentFile=null;
 const fileInput=document.getElementById('fileInput'),fileName=document.getElementById('fileName'),status=document.getElementById('status'),messages=document.getElementById('messages'),chatInput=document.getElementById('chatInput'),modelSelect=document.getElementById('modelSelect'),attachInput=document.getElementById('attachInput'),integrationBtn=document.getElementById('integrationBtn');
 let integrationActive=false;
@@ -113,7 +113,7 @@ async function sendMessage(){
   try{
     const seed=Math.floor(Math.random()*1000000);
     const finalPrompt=`${SYSTEM_DIRECTIVE}\n\nUser: ${text}`;
-    const res=await fetch(`${APKI.AI_URL}${encodeURIComponent(finalPrompt)}?model=${model}&seed=${seed}`);
+    const res=await fetch(`${APKI.AI_URL}${encodeURIComponent(finalPrompt)}?model=${model}&seed=${seed}&json=false`);
     const reply=await res.text();
     load.remove();
     const botDir=getDir(reply);
