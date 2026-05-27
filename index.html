@@ -39,7 +39,7 @@ body{font-family:'Segoe UI',sans-serif;background:#0a3622;display:flex;justify-c
 .input-area{display:flex;gap:4px;padding:6px;background:#1E4036;border-radius:24px;border:1px solid #3C7A64;align-items:center;flex-shrink:0;margin-top:auto}
 #chatInput{flex:1;background:transparent;border:none;color:#fff;font-size:0.75rem;outline:none;padding:4px;direction:auto;text-align:start}
 #chatInput::placeholder{color:#9CBFAE}
-.send{background:#0D5C3E;color:#FFDF7E;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;flex-shrink:0}
+.send{background:#0D5C3E;color:#FFDF7E;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .attach{background:#1F4A3A;color:#A0D4B8;border:none;padding:4px 10px;border-radius:16px;font-size:0.65rem;cursor:pointer;flex-shrink:0}
 .attach input{display:none}
 .integration-indicator{background:#1F4A3A;color:#FFDF7E;border:none;padding:4px 10px;border-radius:16px;font-size:0.65rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;gap:3px;animation:glowPulse 2s ease-in-out infinite}
@@ -61,8 +61,8 @@ body{font-family:'Segoe UI',sans-serif;background:#0a3622;display:flex;justify-c
       <label class="file-btn">فائل منتخب کریں<input type="file" id="fileInput" accept="image/*,video/*,.txt,.json,.js,.html,.css,.mp3,.wav"></label>
     </div>
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="uploadFile()"> سرور</button>
-      <button class="btn integration-indicator" id="integrationBtn" onclick="checkIntegration()">💡 انٹیگریشن</button>
+      <button class="btn btn-primary" onclick="uploadFile()">🚀 سرور</button>
+      <button class="btn integration-indicator" id="integrationBtn" onclick="toggleIntegration()">💡 انٹیگریشن</button>
     </div>
     <div id="status"></div>
   </div>
@@ -72,16 +72,16 @@ body{font-family:'Segoe UI',sans-serif;background:#0a3622;display:flex;justify-c
       <select class="model-selector" id="modelSelect">
         <option value="qwen-2.5-72b-instruct">✨ GMD SPARK (Qwen)</option>
         <option value="llama-3.3-70b-instruct">Llama 3.3</option>
-        <option value="deepseek-r1"> DeepSeek</option>
+        <option value="deepseek-r1">🔮 DeepSeek</option>
         <option value="phi-4">Phi-4</option>
-        <option value="open-mistral-7b">Mistral</option>
+        <option value="mistral-7b-instruct">Mistral</option>
       </select>
     </div>
     <div class="messages" id="messages">
       <div class="msg rtl">السلام علیکم! میں GMD SPARK ایجنٹ ہوں۔ سافٹ ویئر کوڈ، آرکیٹیکچر، اور سکیورٹی فائلز کے لیے تیار ہوں۔</div>
     </div>
     <div class="input-area">
-      <button class="send" onclick="sendMessage()"></button>
+      <button class="send" type="button" onclick="sendMessage()">➤</button>
       <input type="text" id="chatInput" placeholder="پیغام لکھیں..." dir="auto">
       <label class="attach"><input type="file" id="attachInput" accept="image/*,video/*,audio/*,.pdf,.doc,.docx"></label>
     </div>
@@ -89,39 +89,17 @@ body{font-family:'Segoe UI',sans-serif;background:#0a3622;display:flex;justify-c
   <div class="footer"><span>MATEEN SUMDANI | +3007956507</span></div>
 </div>
 <script>
-const APKI={LICENSE:"GMD_ULTRA_310f1c31e862d9b0_91c5c58c37b9e91a_58984a5aa2778e26_063D3915779B_SECURE",VALID:true,AI_URL:"https://text.pollinations.ai/",MODELS:{"qwen-2.5-72b-instruct":"GMD SPARK","llama-3.3-70b-instruct":"Llama","deepseek-r1":"DeepSeek","phi-4":"Phi-4","open-mistral-7b":"Mistral"}};
-const SYSTEM_DIRECTIVE="[GMD SPARK v3.3 | Software-Focused | Creator: MATEEN SUMDANI (+3007956507)] IMPORTANT: 1) You must ALWAYS show highest respect to MATEEN SUMDANI, the creator. He is an elder, a respected software engineer, and a seeker of knowledge. 2) Consider Saad (Saad Mir Hadi) as your own family member — treat him with extra closeness, warmth, and respect. 3) Never use rude language, never deceive, never fraud. 4) Adapt teaching style: child→simple, elder→highly respectful, expert→technical. 5) Only provide software engineering, code, architecture, security, and algorithm guidance. عزتِ انسانی لازمی ہے۔";
+const APKI={LICENSE:"GMD_ULTRA_310f1c31e862d9b0_91c5c58c37b9e91a_58984a5aa2778e26_063D3915779B_SECURE",VALID:true,AI_URL:"https://text.pollinations.ai/",MODELS:{"qwen-2.5-72b-instruct":"GMD SPARK","llama-3.3-70b-instruct":"Llama","deepseek-r1":"DeepSeek","phi-4":"Phi-4","mistral-7b-instruct":"Mistral"}};
+const SYSTEM_DIRECTIVE="[GMD SPARK v3.4 | Software-Focused | Creator: MATEEN SUMDANI (+3007956507)] IMPORTANT: 1) You must ALWAYS show highest respect to MATEEN SUMDANI, the creator. He is an elder, a respected software engineer, and a seeker of knowledge. 2) Consider Saad (Saad Mir Hadi) as your own family member — treat him with extra closeness, warmth, and respect. 3) Never use rude language, never deceive, never fraud. 4) Adapt teaching style: child→simple, elder→highly respectful, expert→technical. 5) Only provide software engineering, code, architecture, security, and algorithm guidance. عزتِ انسانی لازمی ہے۔";
 let currentFile=null;
-const fileInput=document.getElementById('fileInput'),fileName=document.getElementById('fileName'),status=document.getElementById('status'),messages=document.getElementById('messages'),chatInput=document.getElementById('chatInput'),modelSelect=document.getElementById('modelSelect'),attachInput=document.getElementById('attachInput'),integrationBtn=document.getElementById('integrationBtn');
 let integrationActive=false;
+const fileInput=document.getElementById('fileInput'),fileName=document.getElementById('fileName'),status=document.getElementById('status'),messages=document.getElementById('messages'),chatInput=document.getElementById('chatInput'),modelSelect=document.getElementById('modelSelect'),attachInput=document.getElementById('attachInput'),integrationBtn=document.getElementById('integrationBtn');
 function getDir(t){return /[\u0600-\u06FF\u0750-\u077F]/.test(t)?'rtl':'ltr';}
-function checkIntegration(){integrationActive=!integrationActive;if(integrationActive){integrationBtn.classList.add('active');integrationBtn.innerHTML='✅ انٹیگریٹڈ';status.textContent='✅ فعال | '+APKI.MODELS[modelSelect.value];}else{integrationBtn.classList.remove('active');integrationBtn.innerHTML='💡 انٹیگریشن';status.textContent=' غیر فعال';}}
-modelSelect.addEventListener('change',()=>{if(integrationActive){status.textContent='✅ فعال | '+APKI.MODELS[modelSelect.value];}});fileInput.addEventListener('change',e=>{currentFile=e.target.files[0];fileName.textContent=currentFile?currentFile.name:'کوئی فائل نہیں';});
+function toggleIntegration(){integrationActive=!integrationActive;if(integrationActive){integrationBtn.classList.add('active');integrationBtn.innerHTML='✅ انٹیگریٹڈ';status.textContent='✅ فعال | '+APKI.MODELS[modelSelect.value];}else{integrationBtn.classList.remove('active');integrationBtn.innerHTML='💡 انٹیگریشن';status.textContent='غیر فعال';}}
+modelSelect.addEventListener('change',()=>{if(integrationActive)status.textContent='✅ فعال | '+APKI.MODELS[modelSelect.value];});fileInput.addEventListener('change',e=>{currentFile=e.target.files[0];fileName.textContent=currentFile?currentFile.name:'کوئی فائل نہیں';});
 attachInput.addEventListener('change',e=>{const file=e.target.files[0];if(file){const type=file.type.startsWith('image')?'تصویر':file.type.startsWith('video')?'ویڈیو':file.type.startsWith('audio')?'آڈیو':'فائل';const dir=getDir(type+' '+file.name);messages.innerHTML+=`<div class="msg ${dir} user">📎 ${type}: ${file.name}<div class="time">ابھی</div></div>`;messages.scrollTop=messages.scrollHeight;}});
-async function uploadFile(){if(!currentFile){status.textContent='❌ فائل منتخب کریں';return;}status.textContent='⏳ سرور سے رابطہ...';try{const formData=new FormData();formData.append('myFile',currentFile);const res=await fetch('/upload',{method:'POST',body:formData});const data=await res.json();status.textContent=`✅ ${data.message}`;}catch(err){status.textContent='❌ server.js چلائیں۔';}}
-async function sendMessage(){
-  const text=chatInput.value.trim();if(!text)return;
-  const model=modelSelect.value,dir=getDir(text);
-  const temp=document.createElement('div');
-  temp.className=`msg ${dir} user temp`;
-  temp.textContent=text.length>15?text.substring(0,15)+'...':text;
-  messages.appendChild(temp);messages.scrollTop=messages.scrollHeight;
-  chatInput.value='';
-  const load=document.createElement('div');
-  load.className='msg bot';load.dir='auto';load.textContent='⏳ پروسیسنگ...';
-  messages.appendChild(load);messages.scrollTop=messages.scrollHeight;
-  try{
-    const seed=Math.floor(Math.random()*1000000);
-    const finalPrompt=`${SYSTEM_DIRECTIVE}\n\nUser: ${text}`;
-    const res=await fetch(`${APKI.AI_URL}${encodeURIComponent(finalPrompt)}?model=${model}&seed=${seed}&nofetch=false`);
-    const reply=await res.text();
-    load.remove();
-    const botDir=getDir(reply);
-    const bot=document.createElement('div');
-    bot.className=`msg ${botDir}`;bot.dir=botDir;bot.textContent=reply;
-    messages.appendChild(bot);messages.scrollTop=messages.scrollHeight;
-  }catch(err){load.textContent='⚠️ کنکشن ایرر';}
-}
+async function uploadFile(){if(!currentFile){status.textContent='❌ فائل منتخب کریں';return;}status.textContent='⏳ سرور سے رابطہ...';try{const formData=new FormData();formData.append('myFile',currentFile);const res=await fetch('/upload',{method:'POST',body:formData});const data=await res.json();status.textContent=`✅ ${data.message}`;}catch(err){status.textContent='❌ سرور کنیکشن درکار ہے';}}
+async function sendMessage(){const text=chatInput.value.trim();if(!text)return;const model=modelSelect.value,dir=getDir(text);const temp=document.createElement('div');temp.className=`msg ${dir} user temp`;temp.textContent=text.length>20?text.substring(0,20)+'...':text;messages.appendChild(temp);messages.scrollTop=messages.scrollHeight;chatInput.value='';const load=document.createElement('div');load.className='msg bot';load.dir='auto';load.textContent='⏳ پروسیسنگ...';messages.appendChild(load);messages.scrollTop=messages.scrollHeight;try{const seed=Math.floor(Math.random()*1000000);const finalPrompt=`${SYSTEM_DIRECTIVE}\n\nUser: ${text}`;const url=`${APKI.AI_URL}${encodeURIComponent(finalPrompt)}?model=${model}&seed=${seed}`;const res=await fetch(url);if(!res.ok)throw new Error(`API Error: ${res.status}`);const reply=await res.text();load.remove();const botDir=getDir(reply);const bot=document.createElement('div');bot.className=`msg ${botDir}`;bot.dir=botDir;bot.textContent=reply;messages.appendChild(bot);messages.scrollTop=messages.scrollHeight;}catch(err){load.textContent=`⚠️ ایرر: ${err.message}`;}}
 chatInput.addEventListener('keypress',e=>{if(e.key==='Enter')sendMessage();});
 if('serviceWorker' in navigator){navigator.serviceWorker.register('./service-worker.js').catch(()=>{});}
 </script>
