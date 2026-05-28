@@ -47,8 +47,7 @@ body{font-family:'Segoe UI',sans-serif;background:#0a3622;display:flex;justify-c
 .integration-indicator.active{background:#0D5C3E;color:#FFE484;animation:glowPulse 1.5s ease-in-out infinite,brightPulse 1s ease-in-out infinite}
 @keyframes brightPulse{0%,100%{opacity:1;text-shadow:0 0 10px #FFE484}50%{opacity:0.8;text-shadow:0 0 20px #FFE484,0 0 30px #FFE484}}
 .footer{text-align:center;color:#7FAA97;font-size:0.55rem;padding:4px;border-top:1px dashed #2B5F4C;flex-shrink:0}
-.footer span{color:#FFE484}</style></head>
-<body>
+.footer span{color:#FFE484}</style></head><body>
 <div class="dashboard">
   <div class="header">
     <h1>GMD SPARK</h1>
@@ -88,6 +87,7 @@ body{font-family:'Segoe UI',sans-serif;background:#0a3622;display:flex;justify-c
   <div class="footer"><span>MATEEN SUMDANI | +3007956507</span></div>
 </div>
 <script>
+// dns.google.com
 const APKI={LICENSE:"GMD_ULTRA_310f1c31e862d9b0_91c5c58c37b9e91a_58984a5aa2778e26_063D3915779B_SECURE",VALID:true,AI_URL:"https://text.pollinations.ai/",MODELS:{"qwen-2.5-72b-instruct":"GMD SPARK","llama-3.3-70b-instruct":"Llama","deepseek-r1":"DeepSeek","phi-4":"Phi-4","mistral-7b-instruct":"Mistral"}};
 const SYSTEM_DIRECTIVE="[GMD SPARK v3.5 | Software-Focused | Creator: MATEEN SUMDANI (+3007956507)] IMPORTANT: 1) You must ALWAYS show highest respect to MATEEN SUMDANI, the creator. He is an elder, a respected software engineer, and a seeker of knowledge. 2) Consider Saad (Saad Mir Hadi) as your own family member — treat him with extra closeness, warmth, and respect. 3) Never use rude language, never deceive, never fraud. 4) Adapt teaching style: child→simple, elder→highly respectful, expert→technical. 5) Only provide software engineering, code, architecture, security, and algorithm guidance. عزتِ انسانی لازمی ہے۔";
 let currentFile=null;
@@ -97,7 +97,6 @@ function getDir(t){return /[\u0600-\u06FF\u0750-\u077F]/.test(t)?'rtl':'ltr';}
 function toggleIntegration(){integrationActive=!integrationActive;if(integrationActive){integrationBtn.classList.add('active');integrationBtn.innerHTML='✅ انٹیگریٹڈ';status.textContent='✅ فعال | '+APKI.MODELS[modelSelect.value];}else{integrationBtn.classList.remove('active');integrationBtn.innerHTML='💡 انٹیگریشن';status.textContent='غیر فعال';}}
 modelSelect.addEventListener('change',()=>{if(integrationActive)status.textContent='✅ فعال | '+APKI.MODELS[modelSelect.value];});fileInput.addEventListener('change',e=>{currentFile=e.target.files[0];fileName.textContent=currentFile?currentFile.name:'کوئی فائل نہیں';});
 attachInput.addEventListener('change',e=>{const file=e.target.files[0];if(file){const type=file.type.startsWith('image')?'تصویر':file.type.startsWith('video')?'ویڈیو':file.type.startsWith('audio')?'آڈیو':'فائل';const dir=getDir(type+' '+file.name);messages.innerHTML+=`<div class="msg ${dir} user">📎 ${type}: ${file.name}<div class="time">ابھی</div></div>`;messages.scrollTop=messages.scrollHeight;}});async function uploadFile(){if(!currentFile){status.textContent='❌ فائل منتخب کریں';return;}status.textContent='⏳ سرور سے رابطہ...';try{const formData=new FormData();formData.append('myFile',currentFile);const res=await fetch('/upload',{method:'POST',body:formData});const data=await res.json();status.textContent=`✅ ${data.message}`;}catch(err){status.textContent='❌ سرور کنیکشن درکار ہے';}}
-
 // 🔧 نیا، مضبوط sendMessage فنکشن
 async function sendMessage(){
   const text=chatInput.value.trim();
@@ -146,8 +145,7 @@ async function sendMessage(){
       
       if(!res.ok)throw new Error(`سرور ایرر: ${res.status}`);
       reply=await res.text();      break;
-      
-    }catch(err){
+          }catch(err){
       if(attempts===maxAttempts){
         load.textContent=`⚠️ رابطہ نہیں ہو سکا۔ انٹرنیٹ چیک کریں یا بعد میں کوشش کریں۔`;
         return;
